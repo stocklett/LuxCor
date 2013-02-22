@@ -16,7 +16,7 @@
     <Width>4096</Width>
     <Height>2304</Height>
   </LevelMaximumSize>
-  <Filename>C:\Users\cjgala\Documents\ActionScript\GameJam_v2\src\Levels\LuxCor.oep</Filename>
+  <Filename>C:\Users\cjgala\Documents\ActionScript\GameJam_vFinal\GameJam\src\Levels\LuxCor.oep</Filename>
   <AngleMode>Degrees</AngleMode>
   <CameraEnabled>false</CameraEnabled>
   <CameraSize>
@@ -96,7 +96,7 @@
     </Tileset>
     <Tileset>
       <Name>foreground</Name>
-      <FilePath>..\assets\objects\foreground_assets_LG.png</FilePath>
+      <FilePath>..\assets\foreground_assets_LG.png</FilePath>
       <TileSize>
         <Width>96</Width>
         <Height>96</Height>
@@ -105,7 +105,7 @@
     </Tileset>
   </Tilesets>
   <EntityDefinitions>
-    <EntityDefinition Name="PlayerStart" Limit="1" ResizableX="false" ResizableY="false" Rotatable="false" RotateIncrement="15">
+    <EntityDefinition Name="PlayerStart" Limit="-1" ResizableX="false" ResizableY="false" Rotatable="false" RotateIncrement="15">
       <Size>
         <Width>48</Width>
         <Height>48</Height>
@@ -117,10 +117,12 @@
       <ImageDefinition DrawMode="Image" ImagePath="..\Assets\player_LG.png" Tiled="true">
         <RectColor A="255" R="255" G="0" B="0" />
       </ImageDefinition>
-      <ValueDefinitions />
+      <ValueDefinitions>
+        <ValueDefinition xsi:type="IntValueDefinition" Name="spawnID" Default="0" Min="0" Max="100" ShowSlider="false" />
+      </ValueDefinitions>
       <NodesDefinition Enabled="false" Limit="-1" DrawMode="None" Ghost="false" />
     </EntityDefinition>
-    <EntityDefinition Name="DoorObj" Limit="2" ResizableX="false" ResizableY="false" Rotatable="false" RotateIncrement="15">
+    <EntityDefinition Name="DoorObj" Limit="-1" ResizableX="false" ResizableY="false" Rotatable="false" RotateIncrement="15">
       <Size>
         <Width>96</Width>
         <Height>96</Height>
@@ -132,7 +134,11 @@
       <ImageDefinition DrawMode="Image" ImagePath="..\Assets\door.png" Tiled="false">
         <RectColor A="255" R="255" G="0" B="0" />
       </ImageDefinition>
-      <ValueDefinitions />
+      <ValueDefinitions>
+        <ValueDefinition xsi:type="IntValueDefinition" Name="dest" Default="0" Min="0" Max="100" ShowSlider="false" />
+        <ValueDefinition xsi:type="IntValueDefinition" Name="spawn" Default="0" Min="0" Max="100" ShowSlider="false" />
+        <ValueDefinition xsi:type="BoolValueDefinition" Name="locked" Default="false" />
+      </ValueDefinitions>
       <NodesDefinition Enabled="false" Limit="-1" DrawMode="None" Ghost="false" />
     </EntityDefinition>
     <EntityDefinition Name="HoleObj" Limit="-1" ResizableX="false" ResizableY="false" Rotatable="false" RotateIncrement="15">
@@ -163,7 +169,7 @@
         <RectColor A="255" R="255" G="0" B="0" />
       </ImageDefinition>
       <ValueDefinitions />
-      <NodesDefinition Enabled="false" Limit="-1" DrawMode="None" Ghost="false" />
+      <NodesDefinition Enabled="false" Limit="-1" DrawMode="Circuit" Ghost="true" />
     </EntityDefinition>
     <EntityDefinition Name="KeyObj" Limit="-1" ResizableX="false" ResizableY="false" Rotatable="false" RotateIncrement="15">
       <Size>
@@ -283,6 +289,25 @@
         <RectColor A="255" R="255" G="0" B="0" />
       </ImageDefinition>
       <ValueDefinitions />
+      <NodesDefinition Enabled="false" Limit="-1" DrawMode="None" Ghost="false" />
+    </EntityDefinition>
+    <EntityDefinition Name="Return_DoorObj" Limit="-1" ResizableX="false" ResizableY="false" Rotatable="false" RotateIncrement="15">
+      <Size>
+        <Width>96</Width>
+        <Height>192</Height>
+      </Size>
+      <Origin>
+        <X>0</X>
+        <Y>0</Y>
+      </Origin>
+      <ImageDefinition DrawMode="Image" ImagePath="..\assets\return_door.png" Tiled="false">
+        <RectColor A="255" R="255" G="0" B="0" />
+      </ImageDefinition>
+      <ValueDefinitions>
+        <ValueDefinition xsi:type="IntValueDefinition" Name="dest" Default="0" Min="0" Max="100" ShowSlider="false" />
+        <ValueDefinition xsi:type="IntValueDefinition" Name="spawn" Default="0" Min="0" Max="100" ShowSlider="false" />
+        <ValueDefinition xsi:type="BoolValueDefinition" Name="locked" Default="false" />
+      </ValueDefinitions>
       <NodesDefinition Enabled="false" Limit="-1" DrawMode="None" Ghost="false" />
     </EntityDefinition>
   </EntityDefinitions>

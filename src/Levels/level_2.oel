@@ -1,12 +1,11 @@
 <level width="1248" height="1248">
   <Entities>
-    <PlayerStart id="0" x="576" y="1104" />
     <SlimeEnemy id="1" x="96" y="1056" />
     <SlimeEnemy id="2" x="864" y="1056" />
     <SlimeEnemy id="3" x="960" y="1104" />
     <SlimeEnemy id="4" x="432" y="528" />
     <SlimeEnemy id="5" x="144" y="144" />
-    <DoorObj id="6" x="960" y="0" />
+    <DoorObj id="6" x="960" y="0" dest="3" spawn="0" locked="True" />
     <KeyObj id="7" x="384" y="240" />
     <Bookcase id="8" x="384" y="192" />
     <Bookcase id="9" x="384" y="384" />
@@ -39,6 +38,8 @@
     <SlimeEnemy id="36" x="912" y="432" />
     <SlimeEnemy id="37" x="1104" y="288" />
     <SlimeEnemy id="38" x="672" y="240" />
+    <Return_DoorObj id="39" x="576" y="1056" dest="1" spawn="1" locked="False" />
+    <PlayerStart id="40" x="624" y="1104" spawnID="0" />
   </Entities>
   <Foreground_tiles tileset="foreground" exportMode="CSV">0,29,30,0,0,0,0,0,0,0,0,0,0
 0,38,39,0,0,0,0,27,28,0,0,0,0

@@ -13,8 +13,11 @@ package
 		public static const RIGHT:String = "R";
 		public static const UP:String = "U";
 		public static var curLevel = 0;
-		public static var onMainMenu:Boolean;
 		public static const LEVELARRAY:Array = new Array(Assets.level0, Assets.level1, Assets.level2);
+		
+		// Track which doors have been unlocked
+		//	(could use a BETTER fix, of course)
+		public static var unlockedDoors:Array = [[false], [false], [false]];
 	}
 
 }

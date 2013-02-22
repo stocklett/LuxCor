@@ -43,18 +43,17 @@ package
 		{
 			time += FP.elapsed;
 			
-			if (collide("enemy", x, y))
+			if (collide("enemy", x, y))	// Increase the heartrate because enemies are nearby
 			{
 				if(time >= .5)
 				{
-					Global.PLAYER_CLASS.heartRate += 3;
+					Global.PLAYER_CLASS.heartRate += 4;
 					time = 0;
 				}
 			}
-			else
+			else	// Decrease the heartrate instead
 			{
-				if (time >= 1)
-				{
+				if (time >= 1) {
 					Global.PLAYER_CLASS.heartRate -= 4;
 					time = 0;
 				}
@@ -139,15 +138,14 @@ package
 				
 				Global.PLAYER_CLASS.lightLevel = 2;
 			}
-			else
+			else	// If the heartrate is over 200, kill the player
 			{
 				// Dead
 				Global.LIGHT_PLAYER.scale = 0;
 				FP.world = new EndScreen("You are dead. Your heart rate was too high.");
 			}		
 			
-			
-			var xDist:Number = light.scaledWidth * (2.5/3.0);
+			var xDist:Number = light.scaledWidth * (2.5 / 3.0);
 			var yDist:Number = light.scaledHeight * (2.5 / 3.0);
 		
 			setHitbox(xDist, yDist, ( -1 * (Global.PLAYER_CLASS.centerX)) + xDist / 2, ( -1 * (Global.PLAYER_CLASS.centerY)) + yDist / 2);

@@ -14,7 +14,7 @@ package
 		{
 			super(1024, 576, 60, false);
 			FP.world = new MainMenu;
-			//FP.console.enable();
+			FP.console.enable();
 		}
 	}
 }

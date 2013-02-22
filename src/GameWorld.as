@@ -8,22 +8,24 @@ package
 	public class GameWorld extends World
 	{
 		protected var _player:Player;
+		protected var _loadRate:int;
+		public var _lighting:Lighting;
+		
 		protected var _map:Entity;
-	
 		protected var _mapGrid:Grid;
-		protected var _mapImage:Graphic;
+		protected var _mapImage:Graphic;		
 		
-		public var lighting:Lighting;
-		
-		public function GameWorld(level:Class)
+		public function GameWorld(level:Class, spawn:int = 0, h_rate:int = 60)
 		{
 			FP.screen.color = 0x000000;
-			loadMap(level);
+			_loadRate = h_rate;
+			loadMap(level, spawn);
 			Global.PLAYER_CLASS = _player;
 			
+			
 			add(new Slime(400, 400));
-			add(lighting = new Lighting());
-			lighting.add(Global.LIGHT_PLAYER = new LightSource(0, 0, 3));
+			add(_lighting = new Lighting());
+			_lighting.add(Global.LIGHT_PLAYER = new LightSource(0, 0, 3));
 			add(new HUD());
 			add(new Inventory(20, 0));
 		}
@@ -47,16 +49,11 @@ package
 		} 
 		
 		
-		protected function loadMap(mapData:Class):void 
+		protected function loadMap(mapData:Class, spawn:int):void 
 		{
-			if (Global.curLevel == 0 && !Global.onMainMenu) 
-			{
-				Assets.mainTheme.stop();
-				Assets.mainLoop.loop();
-			}
-			
 			var mapXML:XML = FP.getXML(mapData);
 			var node:XML;
+			var doorLock:Boolean;
 			
 			// Create the map grid
 			_mapGrid = new Grid(uint(mapXML.@width), uint(mapXML.@height), 96, 96, 0, 0);
@@ -110,15 +107,25 @@ package
 			add(_map);
 			
 			// Create a player at the start position
-			_player = new Player(int(mapXML.Entities.PlayerStart.@x), int(mapXML.Entities.PlayerStart.@y));
+			for each (node in mapXML.Entities.PlayerStart) {
+				if (int(node.@spawnID) == spawn) _player = new Player(int(node.@x), int(node.@y), _loadRate);
+			}
 			
 			// Add entities that are above the foreground tiles
 			for each (node in mapXML.Entities.DoorObj) {
-
-				add(new Door(int(node.@x), int(node.@y), Global.UP, Global.LEVELARRAY[Global.curLevel+1], false));
+				
+				doorLock = (String(node.@locked) == "True");
+				if (Global.unlockedDoors[Global.curLevel][int(node.@id)] != undefined) 
+						doorLock = doorLock && !Global.unlockedDoors[Global.curLevel][int(node.@id)];
+				//trace(Global.curLevel, int(node.@id), doorLock);
+				add(new Door(int(node.@x), int(node.@y), int(node.@id), Global.UP, int(node.@dest), int(node.@spawn), doorLock, false));
 			}
 			for each (node in mapXML.Entities.Return_DoorObj) {
-				add(new Door(int(node.@x), int(node.@y), Global.UP, Global.LEVELARRAY[Global.curLevel], true));
+				doorLock = (String(node.@locked) == "True");
+				if (Global.unlockedDoors[Global.curLevel][int(node.@id)] != undefined) 
+						doorLock = doorLock && !Global.unlockedDoors[Global.curLevel][int(node.@id)];
+				//trace(Global.curLevel, int(node.@id), doorLock);
+				add(new Door(int(node.@x), int(node.@y), int(node.@id), Global.DOWN, int(node.@dest), int(node.@spawn), doorLock, true));
 			}
 			for each (node in mapXML.Entities.KeyObj) {
 				add(new Item(int(node.@x), int(node.@y), "door", Assets.KEY, "Door Key"));

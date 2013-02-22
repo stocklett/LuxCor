@@ -14,13 +14,13 @@ package
 		public var heartRate:int;
 		public var damage:int;
 		public var inventory:Array;
+		
 		public static const speed:int = 4;
 		public var sprPlayer:Spritemap = new Spritemap(Assets.PLAYER, 48, 48);
-		
 		public var healTime:Number = 0;
 		public const HEAL_RATE:int = 5;
 		
-		public function Player(_x:Number, _y:Number)
+		public function Player(_x:Number, _y:Number, h_rate:int = 60)
 		{
 			setAnimations();
 			graphic = sprPlayer;
@@ -30,7 +30,7 @@ package
 			y = _y;
 			lightLevel = 0;
 			facing = Global.DOWN;
-			heartRate = 60;
+			heartRate = h_rate;
 			damage = 0;
 			inventory = new Array();
 			type = "player";
@@ -88,8 +88,7 @@ package
 			sprPlayer.add("vary", [0, 12, 24, 12], 10);
 		}
 		
-		public function hurtPlayer():void
-		{
+		public function hurtPlayer():void {
 			healTime = 0;
 			damage++;
 		}
@@ -106,16 +105,12 @@ package
 			*/
 			
 			healTime += FP.elapsed;
-			
-			if (damage >= 4)
-			{
+			if (damage >= 4) {
 				// DEAD
 				Global.LIGHT_PLAYER.scale = 0;
 				FP.world = new EndScreen("You are dead. You took to much damage.");
 			}
-			
-			if (healTime >= HEAL_RATE)
-			{
+			if (healTime >= HEAL_RATE) {
 				healTime = 0;
 				damage--;
 				if (damage < 0)
@@ -126,28 +121,36 @@ package
 			{	// (Need to check if there is an item to grab still!)
 				var doorObj:Door;
 				var usedItem:Boolean = false;
+				var useDoor:Boolean = false;
 			
 				if (collide("door", x, y))
 				{
 					doorObj = (Door)(collide("door", x, y));
 					this.facing = doorObj.facing;
 					
-					for (var i:int = 0; i < inventory.length; i++)
-					{
-						if (((Item)(inventory[i]).interactsWith == "door") && usedItem == false)
-						{
-							// DOOR INTERACTED
-							usedItem = true;
-							inventory.splice(i, 1);
-							Global.curLevel++;
-							if (Global.curLevel >= Global.LEVELARRAY.length)
-							{
-								FP.world = new EndScreen("You won!");
+					if (doorObj.locked) {
+						for (var i:int = 0; i < inventory.length; i++) {
+							if (((Item)(inventory[i]).interactsWith == "door") && usedItem == false) {
+								// DOOR INTERACTED
+								usedItem = true;
+								//inventory.splice(i, 1);
+								useDoor = true;
+								// Mark the door as unlocked
+								Global.unlockedDoors[Global.curLevel][doorObj.ID] = true;
+								//trace("unlock", Global.curLevel, doorObj.ID, Global.unlockedDoors[Global.curLevel][doorObj.ID]);
 							}
-							else
-								FP.world = new GameWorld(doorObj.level);
 						}
 					}
+					else useDoor = true;
+					
+					if (useDoor) {
+						Global.curLevel = doorObj.level;
+						if (Global.curLevel >= Global.LEVELARRAY.length)
+							FP.world = new EndScreen("You won!");
+						else
+							FP.world = new GameWorld(Global.LEVELARRAY[doorObj.level], doorObj.spawn, heartRate);
+					}
+					useDoor = false;
 					usedItem = false;
 				}
 				
@@ -201,8 +204,7 @@ package
 				}
 				sprPlayer.play(anim);
 				
-				if (collide("item", x, y))
-				{
+				if (collide("item", x, y)) {
 					Global.PLAYER_CLASS.inventory.push(collide("item", x, y));
 					world.remove(collide("item", x, y));
 				}
